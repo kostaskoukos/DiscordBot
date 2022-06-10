@@ -24,6 +24,7 @@ client.on('messageCreate', async msg => {
 
     if (greekopt('help', command)) {
         msg.channel.send('!nigger + επιλογές: αστείο/joke, ερώτηση/question & την ερώτηση');
+        return;
 
     } else if (greekopt('joke', command)) {//JOKE
         const joke = await axios.get('https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Pun,Spooky,Christmas?blacklistFlags=religious,nsfw');
