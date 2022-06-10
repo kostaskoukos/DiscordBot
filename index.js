@@ -17,8 +17,10 @@ client.on('messageCreate', async msg => {
         return;
 
     const command = split[1];
-    if (!command)
+    if (!command) {
         msg.channel.send('Πες μια εντολή ρε μαύρε');
+        return;
+       }
 
     if (greekopt('help', command)) {
         msg.channel.send('!nigger + επιλογές: αστείο/joke, ερώτηση/question & την ερώτηση');
