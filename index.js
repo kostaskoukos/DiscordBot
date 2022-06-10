@@ -53,4 +53,4 @@ const greekopt = (string, command) => {
     return;
 }
 
-client.login('OTg0NDg1NDEzNDYyODg0Mzgz.GjJGuC.wXV-d8EpFKaLsXqcdVYeItaEePcV_YPKPlO0r4');
+client.login('OTg0NDg1NDEzNDYyODg0Mzgz.GIIgD8.df0bXoHyOV34PhHEIYEm24SS9zM2WbpRxfM_XU');
