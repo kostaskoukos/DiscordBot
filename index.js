@@ -42,7 +42,9 @@ client.on('messageCreate', async msg => {
             msg.channel.send(yes.data.answer);
             // msg.channel.send(yes.data.image);
         }
-    } else {
+    } else if(command == 'rickroll') {
+      msg.channel.send('https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713');
+} else {
         msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
     }
 });
