@@ -1,6 +1,7 @@
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, 'GUILD_MESSAGES', 'GUILD_MESSAGE_TYPING'] });
 const axios = require('axios');
+require('dotenv').config();
 
 client.on('ready', () => {
     console.log('bot online!');
@@ -53,4 +54,4 @@ const greekopt = (string, command) => {
     return;
 }
 
-client.login('OTg0NDg1NDEzNDYyODg0Mzgz.GIIgD8.df0bXoHyOV34PhHEIYEm24SS9zM2WbpRxfM_XU');
+client.login(process.env.TOKEN);
