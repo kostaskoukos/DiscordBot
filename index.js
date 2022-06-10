@@ -46,11 +46,11 @@ client.on('messageCreate', async msg => {
 
 const greekopt = (string, command) => {
     if (string == 'help')
-        return command.toLowerCase() == 'help' || command.toLowerCase() == 'βοηθεια' || command.toLowerCase() == 'βοήθεια';
+        return command == 'help' || command == 'βοηθεια' || command == 'βοήθεια';
     else if (string == 'joke')
-        return command.toLowerCase() == 'joke' || command.toLowerCase() == 'αστείο' || command.toLowerCase() == 'αστειο';
+        return command == 'joke' || command == 'αστείο' || command == 'αστειο';
     else if (string == 'question')
-        return command.toLowerCase() == 'question' || command.toLowerCase() == 'ερώτηση' || command.toLowerCase() == 'ερωτηση';
+        return command == 'question' || command == 'ερώτηση' || command == 'ερωτηση';
     return;
 }
 
