@@ -8,7 +8,7 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async msg => {
-    if (msg.author.user == client.user)
+    if (msg.author.bot)
         return;
 
     const split = msg.content.split(' ');
@@ -17,13 +17,17 @@ client.on('messageCreate', async msg => {
         return;
 
     const command = split[1];
-    if (!command)
+    if (!command) {
         msg.channel.send('Πες μια εντολή ρε μαύρε');
+        return;
+    }
 
-    if (greekopt('help', command)) {
+    if (greekopt('help', command)) {//HELP
         msg.channel.send('!nigger + επιλογές: αστείο/joke, ερώτηση/question & την ερώτηση');
+        return;
+    }
 
-    } else if (greekopt('joke', command)) {//JOKE
+    if (greekopt('joke', command)) {//JOKE
         const joke = await axios.get('https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Pun,Spooky,Christmas?blacklistFlags=religious,nsfw');
         if (joke.data.setup) {
             msg.channel.send(joke.data.setup);
@@ -31,17 +35,51 @@ client.on('messageCreate', async msg => {
         } else {
             msg.channel.send(joke.data.joke);
         }
-    } else if (greekopt('question', command)) {//QUESTION
-        if (!split[2]) {
-            msg.channel.send('Πες μια ερώτηση ρε μαύρε');
-        } else {
-            const yes = await axios.get('https://yesno.wtf/api');
-            msg.channel.send(yes.data.answer);
-            // msg.channel.send(yes.data.image);
-        }
-    } else {
-        msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
+        return;
     }
+
+    if (msg.content.includes('?') || msg.content.includes(';')) {// YES/NO QUESTION
+        const yes = await axios.get('https://yesno.wtf/api');
+        msg.channel.send(yes.data.answer);
+        // msg.channel.send(yes.data.image);
+        return;
+    }
+
+    if (command == 'rickroll') {//RICKROLL
+        msg.channel.send('https://tenor.com/view/rickroll-roll-rick-never-gonna-give-you-up-never-gonna-gif-22954713');
+        return;
+    }
+
+    if (command == 'meme') {
+        const meme = await axios.get('https://meme-api.herokuapp.com/gimme');
+        msg.channel.send(meme.data.url);
+        return;
+    }
+
+    msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
+    // if (greekopt('help', command)) {
+    //     msg.channel.send('!nigger + επιλογές: αστείο/joke, ερώτηση/question & την ερώτηση');
+
+    // } else if (greekopt('joke', command)) {//JOKE
+    //     const joke = await axios.get('https://v2.jokeapi.dev/joke/Miscellaneous,Dark,Pun,Spooky,Christmas?blacklistFlags=religious,nsfw');
+    //     if (joke.data.setup) {
+    //         msg.channel.send(joke.data.setup);
+    //         msg.channel.send(joke.data.delivery);
+    //     } else {
+    //         msg.channel.send(joke.data.joke);
+    //     }
+    // } else if (greekopt('question', command)) {//QUESTION
+    //     if (!split[2]) {
+    //         msg.channel.send('Πες μια ερώτηση ρε μαύρε');
+    //     } else {
+    //         const yes = await axios.get('https://yesno.wtf/api');
+    //         msg.channel.send(yes.data.answer);
+    //         // msg.channel.send(yes.data.image);
+    //     }
+    // } else {
+    //     msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
+    // }
+
 });
 
 const greekopt = (string, command) => {
