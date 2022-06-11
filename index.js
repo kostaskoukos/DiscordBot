@@ -40,7 +40,7 @@ client.on('messageCreate', async msg => {
 //         slice -1 = last character
     if (msg.content.slice(-1) == '?' || msg.content.slice(-1) == ';') {// YES/NO QUESTION
         const yes = await axios.get('https://yesno.wtf/api');
-        msg.channel.send(yes.data.answer);
+        msg.channel.send(yes.data.answer=='yes'?'ναι':'όχι');
         // msg.channel.send(yes.data.image);
         return;
     }
