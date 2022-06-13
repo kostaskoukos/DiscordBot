@@ -1,5 +1,6 @@
 const { Client, Intents } = require('discord.js');
 const voice = require('@discordjs/voice');
+const { Player, QueryType } = require('discord-player');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, 'GUILD_MESSAGES', 'GUILD_VOICE_STATES'] });
 const axios = require('axios');
 require('dotenv').config();
@@ -54,47 +55,78 @@ client.on('messageCreate', async msg => {
     }
 
     const vc = msg.member.voice.channel;
-    // let connection = voice.joinVoiceChannel({
-    //     channelId: vc.id,
-    //     guildId: vc.guildId,
-    //     adapterCreator: msg.guild.voiceAdapterCreator
-    // });
-    // const player = voice.createAudioPlayer();
-    // const resource = voice.createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    //     {
-    //         inputType: voice.StreamType.Arbitrary
-    //     });
+    const player = new Player(client);
+    const queue = player.createQueue(msg.guild, {
+        metadata: msg.channel
+    });
 
-    //     connection.rejoin();
-    //     connection.subscribe(player);
-    //     player.play(resource);
-
-    //     try {
-    //         console.log(player.pause());
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-
-    //     console.log(player.unpause());
-
-    //     connection.disconnect();
-
-    
     if (command == 'play') {
         if (!vc)
             return msg.channel.send('Μπες σε ένα voice channel ρε μαύρε');
 
+        if (!queue.connection) await queue.connect(vc);
+
+        const arg = msg.content.substring(13);
+
+        if (arg.includes('youtube.com/')) {
+            if (arg.includes('playlist')) {                      //PLAYLIST
+                const tracks = await player.search(arg, {
+                    requestedBy: msg.author,
+                    searchEngine: QueryType.YOUTUBE_PLAYLIST
+                }).then(res => res.tracks);
+
+                if (!tracks) {
+                    msg.channel.send('Δεν βρίσκω το playlist ρε μαύρε');
+                    return;
+                }
+
+                queue.addTracks(tracks);
+            } else {                                            //SONG
+                const track = await player.search(arg, {
+                    requestedBy: msg.author,
+                    searchEngine: QueryType.YOUTUBE_VIDEO
+                }).then(res => res.tracks[0]);
+
+                if (!track) {
+                    msg.channel.send('Δεν βρίσκω το τραγούδι ρε μαύρε');
+                    return;
+                }
+
+                queue.addTrack(track);
+            }
+        } else {                                                 //SEARCH TERMS
+            const track = await player.search(arg, {
+                requestedBy: msg.author,
+                searchEngine: QueryType.AUTO
+            }).then(res => res.tracks[0]);
+
+            if (!track) {
+                msg.channel.send('Δεν βρίσκω το τραγούδι ρε μαύρε');
+                return;
+            }
+
+            queue.addTrack(track);
+        }
+        queue.play();
+        msg.channel.send(`Τώρα παίζει: **${queue.current.title}**`);
         return;
     }
     if (command == 'pause') {
-        
+        console.log(queue.setPaused(true));
         return;
     }
     if (command == 'resume') {
-        
+        console.log(queue.setPaused(false));
         return;
-    } if (command == 'stop') {
-        
+    }
+    if (command == 'skip') {
+        queue.skip();
+        return;
+    }
+    if (command == 'stop') {
+        console.log('stop?');
+        queue.clear();
+        queue.destroy();
         return;
     }
     msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
