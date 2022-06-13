@@ -53,21 +53,50 @@ client.on('messageCreate', async msg => {
         return msg.channel.send(meme.data.url);
     }
 
+    const vc = msg.member.voice.channel;
+    // let connection = voice.joinVoiceChannel({
+    //     channelId: vc.id,
+    //     guildId: vc.guildId,
+    //     adapterCreator: msg.guild.voiceAdapterCreator
+    // });
+    // const player = voice.createAudioPlayer();
+    // const resource = voice.createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    //     {
+    //         inputType: voice.StreamType.Arbitrary
+    //     });
+
+    //     connection.rejoin();
+    //     connection.subscribe(player);
+    //     player.play(resource);
+
+    //     try {
+    //         console.log(player.pause());
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+
+    //     console.log(player.unpause());
+
+    //     connection.disconnect();
+
+    
     if (command == 'play') {
-        const vc = msg.member.voice.channel;
         if (!vc)
             return msg.channel.send('Μπες σε ένα voice channel ρε μαύρε');
 
-        const connection = voice.joinVoiceChannel({
-            channelId: '984488265648320636',
-            guildId: vc.guildId,
-            adapterCreator: msg.guild.voiceAdapterCreator
-        });
-        const player = voice.createAudioPlayer();
-        player.play()
-      
+        return;
     }
-
+    if (command == 'pause') {
+        
+        return;
+    }
+    if (command == 'resume') {
+        
+        return;
+    } if (command == 'stop') {
+        
+        return;
+    }
     msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
 });
 
