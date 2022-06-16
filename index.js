@@ -111,16 +111,17 @@ client.on('messageCreate', async msg => {
         player.on('trackStart', (q, track) => { msg.channel.send(`Τώρα παίζει: **${track.title}**`); })
         return;
     }
-    if (command == 'pause') {
-        queue.connection.pause(false);
-        return;
-    }
+    // if (command == 'pause') {
+    //     // queue.connection.pause(false);
+    //     console.log(queue.connection.pause(true));
+    //     return;
+    // }
     if (command == 'resume') {
-        queue.connection.resume();
+        console.log(queue.connection.resume());
         return;
     }
     if (command == 'skip') {
-        queue.skip();
+        console.log(queue.skip());
         queue.play();
         return;
     }
