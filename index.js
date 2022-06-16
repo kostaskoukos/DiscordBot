@@ -59,12 +59,12 @@ client.on('messageCreate', async msg => {
     const queue = player.createQueue(msg.guild, {
         metadata: msg.channel
     });
+    if (!queue.connection) await queue.connect(vc);
 
     if (command == 'play') {
         if (!vc)
             return msg.channel.send('Μπες σε ένα voice channel ρε μαύρε');
 
-        if (!queue.connection) await queue.connect(vc);
 
         const arg = msg.content.substring(13);
 
@@ -108,25 +108,24 @@ client.on('messageCreate', async msg => {
             queue.addTrack(track);
         }
         queue.play();
-        msg.channel.send(`Τώρα παίζει: **${queue.current.title}**`);
+        player.on('trackStart', (q, track) => { msg.channel.send(`Τώρα παίζει: **${track.title}**`); })
         return;
     }
     if (command == 'pause') {
-        console.log(queue.setPaused(true));
+        queue.connection.pause(false);
         return;
     }
     if (command == 'resume') {
-        console.log(queue.setPaused(false));
+        queue.connection.resume();
         return;
     }
     if (command == 'skip') {
         queue.skip();
+        queue.play();
         return;
     }
     if (command == 'stop') {
-        console.log('stop?');
-        queue.clear();
-        queue.destroy();
+        queue.destroy(true);
         return;
     }
     msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
