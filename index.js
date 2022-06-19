@@ -66,6 +66,8 @@ client.on('messageCreate', async msg => {
             queue = player.createQueue(msg.guild, {
                 metadata: msg.channel
             });
+            // await queue.connect(msg.member.voice.channel);
+            // console.log('connecting');
             first = false;
         }
 
@@ -77,7 +79,7 @@ client.on('messageCreate', async msg => {
         }
         if (!queue.connection) {
             await queue.connect(msg.member.voice.channel);
-            console.log('reconnecting');
+            console.log('connecting');
         }
 
         queue.clear();
@@ -124,30 +126,36 @@ client.on('messageCreate', async msg => {
         }
         console.log(queue.tracks.length);
         queue.play();
-        player.on('trackStart', (q, track) => { msg.channel.send(`Τώρα παίζει: **${track.title}**(${track.duration})`); })
+        let sendonce = true;
+        player.on('trackStart', (q, track) => {
+            if (sendonce) {
+                msg.channel.send(`Τώρα παίζει: **${track.title}**(${track.duration})`);
+                sendonce = false;
+            }
+        });
         return;
     }
     if (command == 'pause') {
         queue.connection.pause(true);
         console.log(queue.playing);
+        msg.channel.send('Η μουσική σταμάτησε!');
         return;
     }
     if (command == 'resume') {
         queue.connection.resume();
+        msg.channel.send('Η μουσική ξαναξεκίνησε!');
         return;
     }
     if (command == 'skip') {
+        if (queue.tracks.length == 0)
+            return msg.channel.send('Υπάρχει μόνο ένα τραγούδι στην λίστα ρε μαύρε');
         queue.skip();
+        msg.channel.send('Το τρέχον τραγούδι παραλείφθηκε!');
         return;
     }
     if (command == 'stop') {
         queue.destroy();
-        return;
-    }
-    if (command == 'i') {
-        console.log(queue.connection);
-        console.log(queue.connection.paused);
-        console.log(queue.tracks.length);
+        msg.channel.send('Ο nigger βγήκε από το voice channel');
         return;
     }
     msg.channel.send('Ποια εντολή είναι αυτή ρε μαύρε');
