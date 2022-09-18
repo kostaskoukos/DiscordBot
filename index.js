@@ -1,7 +1,7 @@
-const { Client, Intents } = require('discord.js');
+const { Client } = require('discord.js');
 const { Player, QueryType } = require('discord-player');
 const { GatewayIntentBits } = require('discord-api-types/v10');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, 'GUILD_MESSAGES', 'GUILD_VOICE_STATES', GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.MessageContent] });
 const axios = require('axios');
 require('dotenv').config();
 
